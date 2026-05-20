@@ -49,7 +49,7 @@
                 
                 <!-- 4. Pautan Senarai Permohonan -->
                 <!-- Guna applications.* supaya ia kekal aktif bila berada di halaman Butiran (applications.show) -->
-                <a href="{{ route('applications.index') }}" 
+                <a href="{{ route('admin.loans.index') }}"
                 class="flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors 
                 {{ request()->routeIs('applications.*') ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>

@@ -67,28 +67,34 @@
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8">
             <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
                 <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-sm">3</span>
-                Aset Yang Ingin Dipinjam
+                Keperluan Aset
             </h3>
             
             <div class="overflow-hidden border border-slate-100 rounded-xl">
                 <table class="w-full text-left">
                     <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
                         <tr>
-                            <th class="px-4 py-3 font-semibold">Pilih Aset</th>
-                            <th class="px-4 py-3 font-semibold text-center">Tindakan</th>
+                            <th class="px-4 py-3 font-semibold">Jenis Aset</th>
+                            <th class="px-4 py-3 font-semibold text-center w-32">Kuantiti</th>
+                            <th class="px-4 py-3 font-semibold text-center w-24">Tindakan</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <tr>
+                    <tbody id="aset-container" class="divide-y divide-slate-100">
+                        <tr class="aset-row">
                             <td class="px-4 py-3">
-                                <select name="asset_id[]" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="">-- Sila Pilih Aset --</option>
-                                    <option value="1">MPD-ICT-2024-001 | LAPTOP LENOVO T14</option>
-                                    <option value="2">MPD-ICT-2024-005 | PROJEKTOR EPSON</option>
+                                <select name="jenis_aset[]" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500" required>
+                                    <option value="">-- Pilih Jenis Aset --</option>
+                                    <option value="Laptop">Komputer Riba (Laptop)</option>
+                                    <option value="Projektor">Projektor</option>
+                                    <option value="Tablet">Tablet / iPad</option>
+                                    <option value="Aksesori">Aksesori (Kabel/Adapter/dll)</option>
                                 </select>
                             </td>
+                            <td class="px-4 py-3">
+                                <input type="number" name="kuantiti[]" min="1" value="1" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 text-center" required>
+                            </td>
                             <td class="px-4 py-3 text-center">
-                                <button type="button" class="text-slate-400 hover:text-red-500">
+                                <button type="button" class="btn-buang text-slate-400 hover:text-red-500 transition-colors" title="Buang">
                                     <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </td>
@@ -96,7 +102,7 @@
                     </tbody>
                 </table>
                 <div class="p-3 bg-slate-50 border-t border-slate-100">
-                    <button type="button" class="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                    <button type="button" id="btn-tambah-aset" class="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                         TAMBAH ASET LAIN
                     </button>
@@ -112,4 +118,54 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('aset-container');
+        const btnTambah = document.getElementById('btn-tambah-aset');
+
+        // Fungsi Tambah Baris
+        btnTambah.addEventListener('click', function() {
+            const newRow = `
+                <tr class="aset-row animate-fade-in-up">
+                    <td class="px-4 py-3">
+                        <select name="jenis_aset[]" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">-- Pilih Jenis Aset --</option>
+                            <option value="Laptop">Komputer Riba (Laptop)</option>
+                            <option value="Projektor">Projektor</option>
+                            <option value="Tablet">Tablet / iPad</option>
+                            <option value="Aksesori">Aksesori (Kabel/Adapter/dll)</option>
+                        </select>
+                    </td>
+                    <td class="px-4 py-3">
+                        <input type="number" name="kuantiti[]" min="1" value="1" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 text-center" required>
+                    </td>
+                    <td class="px-4 py-3 text-center">
+                        <button type="button" class="btn-buang text-slate-400 hover:text-red-500 transition-colors" title="Buang">
+                            <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            container.insertAdjacentHTML('beforeend', newRow);
+        });
+
+        // Fungsi Buang Baris (Event Delegation)
+        container.addEventListener('click', function(e) {
+            // Cari jika butang yang ditekan adalah butang tong sampah
+            const btnBuang = e.target.closest('.btn-buang');
+            
+            if (btnBuang) {
+                const rowCount = container.querySelectorAll('.aset-row').length;
+                
+                // Pastikan tinggalkan sekurang-kurangnya 1 baris
+                if (rowCount > 1) {
+                    btnBuang.closest('.aset-row').remove();
+                } else {
+                    alert('Anda mesti meminjam sekurang-kurangnya satu jenis aset.');
+                }
+            }
+        });
+    });
+</script>
 @endsection

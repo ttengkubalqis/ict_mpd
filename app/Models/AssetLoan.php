@@ -10,12 +10,8 @@ class AssetLoan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'asset_id',
-        'purpose',
-        'location',
-        'borrow_date',
-        'return_date',
-        'status',
+        'user_id', 'purpose', 'location', 'borrow_date', 'return_date',
+        'asset_type', 'quantity', 'asset_id', 'status', 
+        'collection_date', 'collection_time', // <-- Tambah dua baris ini
     ];
 }

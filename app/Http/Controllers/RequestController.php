@@ -20,28 +20,38 @@ class RequestController extends Controller
             'tempat' => 'required|string',
             'tarikh_pinjam' => 'required|date',
             'tarikh_pulang' => 'required|date|after_or_equal:tarikh_pinjam',
-            'asset_id' => 'required|array',
+            'jenis_aset' => 'required|array',
+            'kuantiti' => 'required|array',
         ]);
 
-        // 2. Tapis (filter) sekiranya ada pilihan aset yang kosong ("-- Sila Pilih Aset --")
-        $assets = array_filter($request->asset_id); 
+        $jenisAset = $request->jenis_aset;
+        $kuantiti = $request->kuantiti;
+        $adaAset = false;
 
-        // Jika tiada aset langsung yang dipilih, patah balik beserta ralat
-        if(empty($assets)) {
-            return back()->withErrors(['Sila pilih sekurang-kurangnya satu aset untuk dipinjam.']);
+        // 2. Loop melalui senarai aset yang ditambah secara dinamik
+        for ($i = 0; $i < count($jenisAset); $i++) {
+            
+            // Pastikan jenis aset tidak kosong dan kuantiti lebih dari 0
+            if (!empty($jenisAset[$i]) && $kuantiti[$i] > 0) {
+                $adaAset = true;
+                
+                // Simpan ke dalam database
+                AssetLoan::create([
+                    // 'user_id' => auth()->id(), // Buka komen ini jika login berfungsi
+                    'purpose' => $request->tujuan,
+                    'location' => $request->tempat,
+                    'borrow_date' => $request->tarikh_pinjam,
+                    'return_date' => $request->tarikh_pulang,
+                    'asset_type' => $jenisAset[$i],
+                    'quantity' => $kuantiti[$i],
+                    'status' => 'pending' // Status awal
+                ]);
+            }
         }
 
-        // 3. Simpan setiap aset yang dipilih ke dalam pangkalan data
-        foreach ($assets as $id) {
-            AssetLoan::create([
-                // 'user_id' => auth()->id(), // Buka komen ini jika sistem login (Auth) sudah berfungsi
-                'asset_id' => $id,
-                'purpose' => $request->tujuan,
-                'location' => $request->tempat,
-                'borrow_date' => $request->tarikh_pinjam,
-                'return_date' => $request->tarikh_pulang,
-                'status' => 'pending' // Status awal: Menunggu Kelulusan
-            ]);
+        // 3. Jika pengguna hantar borang tapi semua pilihan aset kosong
+        if (!$adaAset) {
+            return back()->withErrors(['Sila pilih sekurang-kurangnya satu jenis aset untuk dipinjam.']);
         }
 
         // 4. Kembali ke dashboard pemohon berserta mesej kejayaan

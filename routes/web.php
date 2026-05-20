@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\AdminLoanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -75,3 +77,17 @@ Route::get('/dashboard-pemohon', function () {
 // Route untuk Permohonan Aset (POV Pemohon)
 Route::get('/pemohon/mohon', [App\Http\Controllers\RequestController::class, 'create'])->name('pemohon.mohon');
 Route::post('/pemohon/simpan', [App\Http\Controllers\RequestController::class, 'store'])->name('pemohon.simpan');
+
+// Route untuk Senarai Permohonan (Admin)
+// Tukar daripada '/senarai-permohonan' kepada '/permohonan'
+Route::get('/permohonan', [AdminLoanController::class, 'index'])->name('admin.loans.index');
+
+// Route untuk Admin Papar Butiran & Proses Kelulusan
+Route::get('/permohonan/{id}', [AdminLoanController::class, 'show'])->name('admin.loans.show');
+Route::put('/permohonan/{id}/kelulusan', [AdminLoanController::class, 'update'])->name('admin.loans.update');
+
+// TAMBAH BARIS INI UNTUK PENGELUAR:
+Route::put('/permohonan/{id}/pengeluaran', [AdminLoanController::class, 'updatePengeluaran'])->name('admin.loans.pengeluaran');
+
+// Route untuk Admin mengesahkan Pemulangan Aset
+Route::put('/permohonan/{id}/pemulangan', [App\Http\Controllers\AdminLoanController::class, 'updatePemulangan'])->name('admin.loans.pemulangan');
